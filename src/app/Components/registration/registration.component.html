@@ -1,0 +1,13 @@
+<!-- <p>registration works!</p>
+<label for=""></label>
+<input type="text" [formControl]="email" />
+{{ email.value }}
+<button (click)="updateemail()">submit</button> -->
+
+<form [formGroup]="registerationForm" (ngSubmit)="registerUser()">
+  <label for="">Email_id:</label>
+  <input type="text" formControlName="email" />
+  <label for="">Password:</label>
+  <input type="password" formControlName="password" />
+  <button type="submit" [disabled]="!registerationForm.valid">Register</button>
+</form>
