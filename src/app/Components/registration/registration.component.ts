@@ -2,6 +2,7 @@ import { AuthService } from './../../services/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -12,13 +13,16 @@ export class RegistrationComponent implements OnInit {
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   });
-  constructor(private _auth: AuthService) {}
+  constructor(private _auth: AuthService, private router: Router) {}
   ngOnInit(): void {}
   registerUser() {
     return this._auth
-      .registerUser(this.registerationForm.getRawValue())
+      .registerUser(this.registerationForm.value)
       .subscribe(
-        res => console.log(res),
+        res => {
+          console.log(res), localStorage.setItem('token', res.token);
+          this.router.navigate(['/special'])
+        },
         err => console.log(err)
       );
     // console.log(this.registerationForm.value);

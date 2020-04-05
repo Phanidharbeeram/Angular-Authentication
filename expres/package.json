@@ -2,19 +2,20 @@
   "name": "expres",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "appback.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon":"nodemon appback.js"
-  },
-  "dependencies": {
-    "express": "*",
-    "nodemon": "*",
-    "body-parser": "*",
-    "mongoose": "*",
-    "cors": "*"
+    "nodemon": "nodemon appback.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.7",
+    "nodemon": "^2.0.2"
+  }
 }

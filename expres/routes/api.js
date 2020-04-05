@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongooose = require("mongoose");
+const jwt = require("jsonwebtoken");
 const User = require("../models/RegisteredUser");
 
 mongooose.connect(
@@ -14,6 +15,22 @@ mongooose.connect(
     }
   }
 );
+verifyToken = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).send("Unauthroized request ");
+  }
+  let token = req.headers.authorization.split(" ")[1];
+  if (token === "null") {
+    return res.status(401).send("Unauthroized request ");
+  }
+  console.log(token);
+  let payload = jwt.verify(token, "secretS");
+  if (!payload) {
+    return res.status(401).send("Unauthroized request ");
+  }
+  req.userId = payload.subject;
+  next();
+};
 router.get("/", (req, res) => {
   res.send("server@api");
   //res.json("hello");
@@ -23,12 +40,21 @@ router.get("/register", (req, res) => {
 });
 router.post("/register", (req, res) => {
   let userData = req.body;
-  let user = new User(userData);
-  user.save((err, registereduser) => {
+  User.findOne({ email: userData.email }, (err, user) => {
     if (err) {
-      console.log(err);
+      res.json("user exists");
     } else {
-      res.status(200).send(registereduser);
+      let user = new User(userData);
+      user.save((err, registereduser) => {
+        if (err) {
+          console.log(err);
+        }
+        if (user) {
+          let payload = { subject: registereduser._id };
+          let token = jwt.sign(payload, "secretS");
+          res.status(200).send({ token });
+        }
+      });
     }
   });
 });
@@ -44,7 +70,11 @@ router.post("/login", (req, res) => {
         if (user.password !== userData.password) {
           res.status(401).send("INVALID PASSWORD");
         } else {
-          res.status(200).send(user);
+          let payload = { subject: user._id };
+          let token = jwt.sign(payload, "secretS");
+          res.status(200).send({ token });
+          console.log("user Logged in");
+          
         }
       }
     }
@@ -91,7 +121,7 @@ router.get("/events", (req, res) => {
   ];
   res.json(events);
 });
-router.get("/special", (req, res) => {
+router.get("/special", verifyToken, (req, res) => {
   let events = [
     {
       userId: 1,

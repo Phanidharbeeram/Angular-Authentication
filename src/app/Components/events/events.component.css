@@ -1,0 +1,7 @@
+#eventscontainer {
+  display: flex;
+}
+.card {
+  margin: 2px;
+  align-items: stretch;
+}

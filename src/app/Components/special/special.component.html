@@ -1,1 +1,17 @@
 <p>special works!</p>
+
+<div id="eventscontainer">
+  <div class="card" *ngFor="let event of specialEvents" style="width: 18rem;">
+    <img
+      src="https://cdn2.f-cdn.com/contestentries/1214970/24969950/5a4258944d6b6_thumb900.jpg"
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ event.title }}</h5>
+      <p class="card-text">
+        {{ event.body }}
+      </p>
+    </div>
+  </div>
+</div>
